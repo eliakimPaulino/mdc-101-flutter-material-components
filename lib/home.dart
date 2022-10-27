@@ -20,7 +20,8 @@ import 'model/products_repository.dart';
 import 'supplemental/asymmetric_view.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key, this.category = Category.all}) : super(key: key);
+  final Category category;
 
   List<Card> _buildGridCards(context) {
     List<Product> products = ProductsRepository.loadProducts(Category.all);
@@ -78,51 +79,54 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text('SHRINE'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.search,
-              semanticLabel: 'search',
-            ),
-            onPressed: () {
-              debugPrint('Search button');
-            },
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.add_shopping_cart_rounded,
-              semanticLabel: 'filter',
-            ),
-            onPressed: () {
-              debugPrint('Filter button');
-            },
-          ),
-        ],
-        leading: IconButton(
-          icon: const Icon(
-            Icons.menu,
-            semanticLabel: 'menu',
-          ),
-          onPressed: () {
-            debugPrint('Menu button');
-          },
-        ),
-      ),
-      body: 
-      // AsymmetricView(
-      //   products: ProductsRepository.loadProducts(Category.all),
-      // ),
-      GridView.count(
-        crossAxisCount: 2,
-        padding: const EdgeInsets.all(16.0),
-        childAspectRatio: 8.0 / 9.0,
-        children: _buildGridCards(context),
-      ),
-      resizeToAvoidBottomInset: false,
+    return AsymmetricView(
+      products: ProductsRepository.loadProducts(category),
     );
+    // Scaffold(
+    //   appBar: AppBar(
+    //     elevation: 0,
+    //     title: const Text('SHRINE'),
+    //     actions: <Widget>[
+    //       IconButton(
+    //         icon: const Icon(
+    //           Icons.search,
+    //           semanticLabel: 'search',
+    //         ),
+    //         onPressed: () {
+    //           debugPrint('Search button');
+    //         },
+    //       ),
+    //       IconButton(
+    //         icon: const Icon(
+    //           Icons.add_shopping_cart_rounded,
+    //           semanticLabel: 'filter',
+    //         ),
+    //         onPressed: () {
+    //           debugPrint('Filter button');
+    //         },
+    //       ),
+    //     ],
+    //     leading: IconButton(
+    //       icon: const Icon(
+    //         Icons.menu,
+    //         semanticLabel: 'menu',
+    //       ),
+    //       onPressed: () {
+    //         debugPrint('Menu button');
+    //       },
+    //     ),
+    //   ),
+    //   body:
+    //   // AsymmetricView(
+    //   //   products: ProductsRepository.loadProducts(Category.all),
+    //   // ),
+    //   GridView.count(
+    //     crossAxisCount: 2,
+    //     padding: const EdgeInsets.all(16.0),
+    //     childAspectRatio: 8.0 / 9.0,
+    //     children: _buildGridCards(context),
+    //   ),
+    //   resizeToAvoidBottomInset: false,
+    // );
   }
 }

@@ -18,10 +18,25 @@ import 'home.dart';
 import 'login.dart';
 import 'colors.dart';
 import 'supplemental/cut_corners_border.dart';
+import 'backdrop.dart';
+import 'model/product.dart';
+import 'category_menu_page.dart';
 
-// TODO: Convert ShrineApp to stateful widget (104)
-class ShrineApp extends StatelessWidget {
+class ShrineApp extends StatefulWidget {
   const ShrineApp({Key? key}) : super(key: key);
+
+  @override
+  State<ShrineApp> createState() => _ShrineAppState();
+}
+
+class _ShrineAppState extends State<ShrineApp> {
+  Category _currentCategory = Category.all;
+
+  void _onCategoryTap(Category category) {
+    setState(() {
+      _currentCategory = category;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +44,23 @@ class ShrineApp extends StatelessWidget {
       title: 'Shrine',
       initialRoute: '/login',
       routes: {
-        '/login': (BuildContext context) => const LoginPage(),
-        // TODO: Change to a Backdrop with a HomePage frontLayer (104)
+        '/login': (BuildContext context) => Backdrop(
+              currentCategory: Category.all,
+              frontLayer: HomePage(category: _currentCategory),
+              backLayer: CategoryMenuPage(
+                currentCategory: _currentCategory,
+                onCategoryTap: _onCategoryTap,
+              ),
+              frontTitle: const Text('SHRINE'),
+              backTitle: const Text('MENU'),
+            ),
         '/': (BuildContext context) => const HomePage(),
-        // TODO: Make currentCategory field take _currentCategory (104)
-        // TODO: Pass _currentCategory for frontLayer (104)
-        // TODO: Change backLayer field value to CategoryMenuPage (104)
       },
       theme: _kShrineTheme,
     );
   }
 }
 
-// TODO: Build a Shrine Theme (103)
 TextTheme _buildShrineTextTheme(TextTheme base) {
   return base
       .copyWith(
@@ -103,8 +122,6 @@ ThemeData _buildShrineTheme() {
     textSelectionTheme: const TextSelectionThemeData(
       selectionColor: kShrinePink100,
     ),
-    // TODO: Add the icon themes (103)
-    // TODO: Decorate the inputs (103)
   );
 }
 // TODO: Build a Shrine Text Theme (103)
